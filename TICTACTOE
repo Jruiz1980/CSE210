@@ -1,0 +1,69 @@
+# Tic Tac Toe
+# Johnathan Ruiz
+# CSE210
+
+from collections import deque
+
+turn = deque(["0", "X"])
+board = [
+    [" ", " ", " "],
+    [" ", " ", " "],
+    [" ", " ", " "],
+]
+def show_board():
+    print("")
+    for row in board:
+        print(row)
+def update_board(position, player):
+    board[position[0]][position[1]] = player
+def rotate_turn():
+    turn.rotate()
+    return turn[0]
+def process_position(position):
+    row, col= position.split(",")
+    return [int(row) - 1, int(col) - 1]
+def position_correct(position):
+    if 0 <= position[0] <= 2 and 0 <= position[1] <= 2:
+        if board[position[0]][position[1]] == " ":
+            return True
+    return False
+def has_won(j):
+    # compare the rows of board
+    if board[0] == [j, j, j] or board[1] == [j, j, j] or board[2] == [j, j, j]:
+        return True
+    # compare the columns
+    elif board[0][0] == j and board[1][0] == j and board[2][0] == j:
+        return True
+    elif board[0][1] == j and board[1][1] == j and board[2][1] == j:
+        return True
+    elif board[0][2] == j and board[1][2] == j and board[2][2] == j:
+        return True
+    # compare the diagonals
+    elif board[0][0] == j and board[1][1] == j and board[2][2] == j:
+        return True
+    elif board[0][2] == j and board[1][1] == j and board[2][0] == j:
+        return True
+    return False
+def main():
+    show_board()
+    player = rotate_turn()
+    while True:
+        position = input("Play {}, Choose a position (row, col) from 1 to 3. 'quit' for quit".format(player))
+        if position == 'quit':
+            print("Bye!!!")
+            break
+        try:
+            position_l = process_position(position)
+        except:
+            print("Error, position {} not valid. ".format(position))
+            continue
+        if position_correct(position_l):
+            update_board(position_l, player)
+            show_board()
+            if has_won(player):
+                print("player {} has won!!!".format(player))
+                break
+            player = rotate_turn()
+        else:
+            print("Position {} not valid. ".format(position))
+main()
